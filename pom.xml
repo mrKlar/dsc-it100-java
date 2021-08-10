@@ -4,13 +4,13 @@
 
 	<groupId>com.github.kmbulebu.dsc</groupId>
 	<artifactId>dsc-it100-library</artifactId>
-	<version>0.7-SNAPSHOT</version>
+	<version>0.7</version>
 	<packaging>bundle</packaging>
 
 	<name>DSC IT-100 Serial Module API Library</name>
 	<description>Enables communication with a DSC Security System via the IT-100 serial integration module.</description>
 
-	<url>https://github.com/kmbulebu/dsc-it100-java</url>
+	<url>https://github.com/mrKlar/dsc-it100-java</url>
 	<inceptionYear>2013</inceptionYear>
 
 	<licenses>
@@ -30,7 +30,7 @@
 	</developers>
 
 	<scm>
-		<connection>scm:git:https://github.com/kmbulebu/dsc-it100-java.git</connection>
+		<connection>scm:git:https://github.com/mrKlar/dsc-it100-java.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/kmbulebu/dsc-it100-java.git</developerConnection>
 		<url>https://github.com/kmbulebu/dsc-it100-java</url>
 		<tag>HEAD</tag>
