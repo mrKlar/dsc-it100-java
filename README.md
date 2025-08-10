@@ -117,18 +117,37 @@ This will create a distribution ZIP file in the `target` directory named `dsc-it
 
 ### 3. Configure the Service
 
-Open the `dsc-it100-service.xml` file in a text editor. You can change the connection details for your IT-100 module here:
+For security, the service password must be encrypted using the Windows Data Protection API (DPAPI). This means the password is encrypted for the specific user account that the service will run as.
 
-```xml
-  <!-- ... -->
-  <!-- Make the service configurable via environment variables -->
-  <env name="DSC_HOST" value="envisalink"/>
-  <env name="DSC_PORT" value="4025"/>
-  <env name="DSC_PASSWORD" value="user"/>
-  <!-- ... -->
-```
+**A. Encrypt Your Password**
 
-Modify the `value` attributes for `DSC_HOST`, `DSC_PORT`, and `DSC_PASSWORD` to match your setup.
+First, you need to generate the encrypted version of your password.
+
+1.  Open a Command Prompt or PowerShell on the Windows machine where the service will run.
+2.  Make sure you are logged in as the **same user account** that will run the service (e.g., Local System, a specific service account, or your own user account).
+3.  Navigate to the project's root directory.
+4.  Run the following command, replacing `your-secret-password` with your actual password:
+    ```bash
+    mvn exec:java -Dexec.args="your-secret-password"
+    ```
+5.  The command will output a long, Base64-encoded string. This is your encrypted password. Copy it to your clipboard.
+
+**B. Update the Configuration File**
+
+1.  In the service directory (e.g., `C:\Program Files\dsc-it100-service`), open the `dsc-it100-service.xml` file in a text editor.
+2.  Find the `<env name="DSC_PASSWORD_ENCRYPTED" ... />` line.
+3.  Paste your encrypted password string as the `value`, replacing the placeholder text.
+
+    *Before:*
+    ```xml
+    <env name="DSC_PASSWORD_ENCRYPTED" value="!!! PASTE YOUR ENCRYPTED PASSWORD HERE !!!"/>
+    ```
+
+    *After (example):*
+    ```xml
+    <env name="DSC_PASSWORD_ENCRYPTED" value="AQAAANCM...your...long...encrypted...string..."/>
+    ```
+4.  You can also change the `DSC_HOST` and `DSC_PORT` values in the same file if needed.
 
 ### 4. Install and Manage the Service
 

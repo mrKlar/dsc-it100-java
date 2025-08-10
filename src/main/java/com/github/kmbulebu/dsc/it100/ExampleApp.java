@@ -14,7 +14,24 @@ public class ExampleApp {
 		// Configure for Envisalink. Read configuration from system properties with defaults.
 		final String host = System.getProperty("dsc.host", "envisalink");
 		final int port = Integer.parseInt(System.getProperty("dsc.port", "4025"));
-		final String password = System.getProperty("dsc.password", "user");
+
+		String password = System.getProperty("dsc.password", "user");
+		final String encryptedPassword = System.getProperty("dsc.password.encrypted");
+
+		if (encryptedPassword != null && !encryptedPassword.isEmpty()) {
+			// If an encrypted password is provided, decrypt it.
+			// This will only work on the Windows machine where it was encrypted by the same user.
+			if (System.getProperty("os.name").toLowerCase().startsWith("windows")) {
+				try {
+					password = com.github.kmbulebu.dsc.it100.security.PasswordUtil.decrypt(encryptedPassword);
+				} catch (Exception e) {
+					System.err.println("FATAL: Failed to decrypt password. The service will likely fail to connect.");
+					e.printStackTrace();
+				}
+			} else {
+				System.err.println("WARNING: 'dsc.password.encrypted' is set, but this is not a Windows system. Decryption is not possible. Falling back to default password.");
+			}
+		}
 
 		final IT100 it100 = new IT100(new ConfigurationBuilder().withRemoteSocket(host, port)
 				.withEnvisalinkPassword(password).build());

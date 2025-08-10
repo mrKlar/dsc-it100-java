@@ -3,25 +3,28 @@
   <name>DSC IT-100 Service</name>
   <description>Listens to a DSC IT-100 module and logs events.</description>
 
-  <!-- The executable to run -->
   <executable>java</executable>
 
-  <!-- The arguments to pass to java. Note the configurable properties. -->
-  <!-- The JAR name must match the one built by Maven. -->
-  <arguments>-Ddsc.host=%DSC_HOST% -Ddsc.port=%DSC_PORT% -Ddsc.password=%DSC_PASSWORD% -jar "dsc-it100-service.jar"</arguments>
+  <arguments>-Ddsc.host=%DSC_HOST% -Ddsc.port=%DSC_PORT% -Ddsc.password.encrypted=%DSC_PASSWORD_ENCRYPTED% -jar "dsc-it100-service.jar"</arguments>
 
-  <!-- Make the service configurable via environment variables -->
   <env name="DSC_HOST" value="envisalink"/>
   <env name="DSC_PORT" value="4025"/>
-  <env name="DSC_PASSWORD" value="user"/>
 
-  <!-- Log configuration -->
+  <!--
+    IMPORTANT: You must provide an encrypted password for the service to work.
+    1. Build the project with 'mvn package'.
+    2. Run the encryption utility from your command line (see README for details).
+    3. Copy the resulting encrypted string.
+    4. Paste the encrypted string as the value for DSC_PASSWORD_ENCRYPTED below.
+    NOTE: The service must be run as the SAME Windows user that you used to encrypt the password.
+  -->
+  <env name="DSC_PASSWORD_ENCRYPTED" value="!!! PASTE YOUR ENCRYPTED PASSWORD HERE !!!"/>
+
   <logpath>%BASE%\logs</logpath>
   <log mode="roll-by-size">
     <sizeThreshold>10240</sizeThreshold>
     <keepFiles>8</keepFiles>
   </log>
 
-  <!-- Restart the service if it fails -->
   <onfailure action="restart" delay="10 sec"/>
 </service>
