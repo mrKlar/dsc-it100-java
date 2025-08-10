@@ -1,0 +1,27 @@
+<service>
+  <id>dsc-it100-service</id>
+  <name>DSC IT-100 Service</name>
+  <description>Listens to a DSC IT-100 module and logs events.</description>
+
+  <!-- The executable to run -->
+  <executable>java</executable>
+
+  <!-- The arguments to pass to java. Note the configurable properties. -->
+  <!-- The JAR name must match the one built by Maven. -->
+  <arguments>-Ddsc.host=%DSC_HOST% -Ddsc.port=%DSC_PORT% -Ddsc.password=%DSC_PASSWORD% -jar "dsc-it100-service.jar"</arguments>
+
+  <!-- Make the service configurable via environment variables -->
+  <env name="DSC_HOST" value="envisalink"/>
+  <env name="DSC_PORT" value="4025"/>
+  <env name="DSC_PASSWORD" value="user"/>
+
+  <!-- Log configuration -->
+  <logpath>%BASE%\logs</logpath>
+  <log mode="roll-by-size">
+    <sizeThreshold>10240</sizeThreshold>
+    <keepFiles>8</keepFiles>
+  </log>
+
+  <!-- Restart the service if it fails -->
+  <onfailure action="restart" delay="10 sec"/>
+</service>

@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.github.kmbulebu.dsc</groupId>
-	<artifactId>dsc-it100-library</artifactId>
-	<version>0.7</version>
-	<packaging>bundle</packaging>
+	<artifactId>dsc-it100-service</artifactId>
+	<version>0.7-service</version>
+	<packaging>jar</packaging>
 
-	<name>DSC IT-100 Serial Module API Library</name>
+	<name>DSC IT-100 Serial Module Service</name>
 	<description>Enables communication with a DSC Security System via the IT-100 serial integration module.</description>
 
 	<url>https://github.com/mrKlar/dsc-it100-java</url>
@@ -167,20 +167,6 @@
 					</configuration>
 				</plugin>
 				<plugin>
-					<groupId>org.apache.felix</groupId>
-					<artifactId>maven-bundle-plugin</artifactId>
-					<version>4.1.0</version>
-					<configuration>
-						<instructions>
-							<Private-Package>com.github.kmbulebu.dsc.it100.mina.*,
-								com.github.kmbulebu.dsc.it100.rxjava</Private-Package>
-							<Export-Package>com.github.kmbulebu.dsc.it100.*,
-								!com.github.kmbulebu.dsc.it100.mina.*,
-								!com.github.kmbulebu.dsc.it100.rxjava</Export-Package>
-						</instructions>
-					</configuration>
-				</plugin>
-				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-release-plugin</artifactId>
 					<version>2.5.3</version>
@@ -195,9 +181,41 @@
 		</pluginManagement>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<extensions>true</extensions>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.3.0</version>
+				<executions>
+					<execution>
+						<id>make-fat-jar</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<finalName>dsc-it100-service</finalName>
+							<appendAssemblyId>false</appendAssemblyId>
+							<archive>
+								<manifest>
+									<mainClass>com.github.kmbulebu.dsc.it100.ExampleApp</mainClass>
+								</manifest>
+							</archive>
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+						</configuration>
+					</execution>
+					<execution>
+						<id>make-distribution</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<descriptors>
+								<descriptor>src/main/assembly/distribution.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<artifactId>maven-source-plugin</artifactId>

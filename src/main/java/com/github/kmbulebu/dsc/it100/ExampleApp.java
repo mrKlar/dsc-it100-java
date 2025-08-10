@@ -11,9 +11,13 @@ public class ExampleApp {
 
 	public static void main(String[] args) {
 		
-		// Configure for Envisalink (defaults)
-		final IT100 it100 = new IT100(new ConfigurationBuilder().withRemoteSocket("envisalink", 4025)
-				.withEnvisalinkPassword("user").build());
+		// Configure for Envisalink. Read configuration from system properties with defaults.
+		final String host = System.getProperty("dsc.host", "envisalink");
+		final int port = Integer.parseInt(System.getProperty("dsc.port", "4025"));
+		final String password = System.getProperty("dsc.password", "user");
+
+		final IT100 it100 = new IT100(new ConfigurationBuilder().withRemoteSocket(host, port)
+				.withEnvisalinkPassword(password).build());
 		
 		try {	
 			// Start communicating with IT-100.
